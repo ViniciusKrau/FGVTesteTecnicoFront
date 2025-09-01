@@ -1,103 +1,296 @@
-import Image from "next/image";
+"use client";
+import ButtonTailwind from "@/components/ButtonTailwind";
+import DefaultHeader from "@/components/header/DefaultHeader";
+import ListHead from "@/components/ListHead";
+import ListItem from "@/components/ListItem";
+import Modal from "@/components/Modal";
+import { useState } from "react";
 
 export default function Home() {
-  return (
-    <div className="font-sans grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20">
-      <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="font-mono list-inside list-decimal text-sm/6 text-center sm:text-left">
-          <li className="mb-2 tracking-[-.01em]">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] font-mono font-semibold px-1 py-0.5 rounded">
-              src/app/page.tsx
-            </code>
-            .
-          </li>
-          <li className="tracking-[-.01em]">
-            Save and see your changes instantly.
-          </li>
-        </ol>
+  const placeholderItems = [
+    {
+      codPedido: 1,
+      cnpj: "Item 1",
+      nome: "Description 1",
+      date: "2023-01-01",
+      valor: "Active",
+    },
+    {
+      codPedido: 2,
+      cnpj: "Item 2",
+      nome: "Description 2",
+      date: "2023-01-02",
+      valor: "Inactive",
+    },
+    {
+      codPedido: 3,
+      cnpj: "Item 3",
+      nome: "Description 3",
+      date: "2023-01-03",
+      valor: "Active",
+    },
+    {
+      codPedido: 4,
+      cnpj: "Item 4",
+      nome: "Description 4",
+      date: "2023-01-04",
+      valor: "Inactive",
+    },
+    {
+      codPedido: 5,
+      cnpj: "Item 5",
+      nome: "Description 5",
+      date: "2023-01-05",
+      valor: "Active",
+    },
+    {
+      codPedido: 6,
+      cnpj: "Item 6",
+      nome: "Description 6",
+      date: "2023-01-06",
+      valor: "Active",
+    },
+    {
+      codPedido: 7,
+      cnpj: "Item 7",
+      nome: "Description 7",
+      date: "2023-01-07",
+      valor: "Inactive",
+    },
+    {
+      codPedido: 8,
+      cnpj: "Item 8",
+      nome: "Description 8",
+      date: "2023-01-08",
+      valor: "Active",
+    },
+    {
+      codPedido: 9,
+      cnpj: "Item 9",
+      nome: "Description 9",
+      date: "2023-01-09",
+      valor: "Inactive",
+    },
+    {
+      codPedido: 10,
+      cnpj: "Item 10",
+      nome: "Description 10",
+      date: "2023-01-10",
+      valor: "Active",
+    },
+    {
+      codPedido: 11,
+      cnpj: "Item 11",
+      nome: "Description 11",
+      date: "2023-01-11",
+      valor: "Inactive",
+    },
+    {
+      codPedido: 12,
+      cnpj: "Item 12",
+      nome: "Description 12",
+      date: "2023-01-12",
+      valor: "Active",
+    },
+    {
+      codPedido: 13,
+      cnpj: "Item 13",
+      nome: "Description 13",
+      date: "2023-01-13",
+      valor: "Inactive",
+    },
+    {
+      codPedido: 14,
+      cnpj: "Item 14",
+      nome: "Description 14",
+      date: "2023-01-14",
+      valor: "Active",
+    },
+    {
+      codPedido: 15,
+      cnpj: "Item 15",
+      nome: "Description 15",
+      date: "2023-01-15",
+      valor: "Inactive",
+    },
+    {
+      codPedido: 16,
+      cnpj: "Item 16",
+      nome: "Description 16",
+      date: "2023-01-16",
+      valor: "Active",
+    },
+    {
+      codPedido: 17,
+      cnpj: "Item 17",
+      nome: "Description 17",
+      date: "2023-01-17",
+      valor: "Inactive",
+    },
+    {
+      codPedido: 18,
+      cnpj: "Item 18",
+      nome: "Description 18",
+      date: "2023-01-18",
+      valor: "Active",
+    },
+    {
+      codPedido: 19,
+      cnpj: "Item 19",
+      nome: "Description 19",
+      date: "2023-01-19",
+      valor: "Inactive",
+    },
+    {
+      codPedido: 20,
+      cnpj: "Item 20",
+      nome: "Description 20",
+      date: "2023-01-20",
+      valor: "Active",
+    },
+    {
+      codPedido: 21,
+      cnpj: "Item 21",
+      nome: "Description 21",
+      date: "2023-01-21",
+      valor: "Inactive",
+    },
+    {
+      codPedido: 22,
+      cnpj: "Item 22",
+      nome: "Description 22",
+      date: "2023-01-22",
+      valor: "Active",
+    },
+    {
+      codPedido: 23,
+      cnpj: "Item 23",
+      nome: "Description 23",
+      date: "2023-01-23",
+      valor: "Inactive",
+    },
+    {
+      codPedido: 24,
+      cnpj: "Item 24",
+      nome: "Description 24",
+      date: "2023-01-24",
+      valor: "Active",
+    },
+    {
+      codPedido: 25,
+      cnpj: "Item 25",
+      nome: "Description 25",
+      date: "2023-01-25",
+      valor: "Inactive",
+    },
+    {
+      codPedido: 26,
+      cnpj: "Item 26",
+      nome: "Description 26",
+      date: "2023-01-26",
+      valor: "Active",
+    },
+  ];
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:w-auto"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+  const [isNewPedidoModalOpen, setIsNewPedidoModalOpen] = useState(false);
+  const [isListModalOpen, setIsListModalOpen] = useState(false);
+  const [selectedItem, setSelectedItem] = useState<SelectedItem>();
+
+  interface SelectedItem {
+    codPedido: number | string;
+    cnpj: string;
+    nome: string;
+    date: string;
+    valor: number | string;
+  }
+
+  return (
+    <>
+      {isNewPedidoModalOpen && (
+        <Modal onClose={() => setIsNewPedidoModalOpen(false)}>
+          <input
+            type="text"
+            placeholder="cnpj"
+            className="input input-bordered w-full max-w-xs mb-3"
+          />
+          <div className="flex justify-center gap-10">
+            <button
+              className="btn btn-primary"
+              onClick={() => setIsNewPedidoModalOpen(false)}
+            >
+              Close
+            </button>
+            <button
+              className="btn btn-secondary"
+              onClick={() => {
+                console.log("teste");
+              }}
+            >
+              Teste
+            </button>
+          </div>
+        </Modal>
+      )}
+
+      
+      <DefaultHeader />
+      <main className="mx-auto max-w-5xl p-8">
+        <h1 className="text-4xl font-semibold mb-4">Home</h1>
+        <div className="flex justify-between p-4">
+          <p className="text-3xl text-gray-300 ml-4">Pedidos</p>
+          <ButtonTailwind
+            onClick={() => setIsNewPedidoModalOpen(true)}
           >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent font-medium text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 w-full sm:w-auto md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+            novo pedido
+          </ButtonTailwind>
         </div>
+
+        <table className="w-full border-collapse border border-gray-800 mb-8">
+          <ListHead
+            columns={[
+              { label: 'ID', className: 'w-1/12' },
+              { label: 'Title', className: 'w-3/12' },
+              { label: 'Description', className: 'w-5/12' },
+              { label: 'Date', className: 'w-2/12' },
+              { label: 'Status', className: 'w-1/12' },
+            ]}
+            rowClassName="bg-gray-800"
+          />
+          <ListItem
+            items={placeholderItems}
+            onSelect={(item) => {
+              setSelectedItem(item);
+              setIsListModalOpen(true);
+            }}
+            rowClassName="cursor-pointer hover:bg-gray-700"
+            cellClassName="border border-gray-300 p-2"
+          />
+        </table>
       </main>
-      <footer className="row-start-3 flex gap-[24px] flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
-    </div>
+
+      {isListModalOpen && selectedItem && (
+        <Modal onClose={() => setIsListModalOpen(false)}>
+          <h2 className="text-2xl font-bold mb-4">{selectedItem.codPedido}</h2>
+          <p>
+            <strong>ID:</strong> {selectedItem.cnpj}
+          </p>
+          <p>
+            <strong>Description:</strong> {selectedItem.nome}
+          </p>
+          <p>
+            <strong>Date:</strong> {selectedItem.date}
+          </p>
+          <p>
+            <strong>Status:</strong> {selectedItem.valor}
+          </p>
+          <div className="flex justify-center mt-4">
+            <ButtonTailwind onClick={() => setIsListModalOpen(false)}>
+              Close
+            </ButtonTailwind>
+          </div>
+        </Modal>
+      )}
+
+    </>
   );
 }

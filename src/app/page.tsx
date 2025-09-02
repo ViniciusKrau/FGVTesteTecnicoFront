@@ -8,6 +8,7 @@ import { useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
 import { apiFetch, Pedido, Cliente } from "@/api/ApiGet";
 import Cookies from "js-cookie";
+import { currencyFormat } from "@/lib/currencyFormat";
 
 export default function Home() {
     const router = useRouter();
@@ -161,7 +162,7 @@ export default function Home() {
                     <p>
                         <strong>Valor: </strong>{" "}
                         {!isNaN(Number(selectedItem.valorTotal))
-                            ? `R$${Number(selectedItem.valorTotal).toFixed(2)}`
+                            ? currencyFormat(+selectedItem.valorTotal)
                             : selectedItem.valorTotal}
                     </p>
                     <div className="flex justify-center mt-4">

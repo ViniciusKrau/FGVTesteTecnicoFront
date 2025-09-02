@@ -1,5 +1,6 @@
 import React from "react";
-import {Pedido} from "@/api/ApiGet";
+import { Pedido } from "@/api/ApiGet";
+import { currencyFormat } from "@/lib/currencyFormat";
 
 interface ListItemProps {
     items: Pedido[];
@@ -35,7 +36,7 @@ const ListItem: React.FC<ListItemProps> = ({
                     className={rowClassName}
                 >
                     {columns.map((key) => (
-                        <td key={String(key)} className={cellClassName}>
+                        <td key={String(key)} className={`${cellClassName} ${key === "valorTotal" ? "text-center" : ""}`}>
                             {key === "dataPedido"
                                 ? new Date(item[key]).toLocaleString("pt-BR", {
                                       day: "2-digit",
@@ -45,6 +46,8 @@ const ListItem: React.FC<ListItemProps> = ({
                                       minute: "2-digit",
                                       hour12: false,
                                   })
+                                : key === "valorTotal" && !isNaN(Number(item[key]))
+                                ? currencyFormat(+item[key])
                                 : item[key]}
                         </td>
                     ))}

@@ -9,6 +9,7 @@ import Cookies from "js-cookie";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import * as Api from "@/api/ApiGet";
+import { currencyFormat } from "@/lib/currencyFormat";
 
 interface CartItem extends Product {
     quantity: number;
@@ -168,12 +169,12 @@ export default function Catalog() {
                                         <span>{item.nome} x{item.quantity}</span>
                                     </div>
                                     <div className="flex w-1/2 justify-end items-center py-2 px-2">
-                                        <span>{`R$${(item.preco * item.quantity).toFixed(2)}`}</span>
+                                        <span>{currencyFormat(valorTotal)}</span>
                                     </div>
                                 </div>
                             ))}
                         </div>
-                        <p className="mb-4 text-center">Total Amount: {`R$${valorTotal.toFixed(2)}`}</p>
+                        <p className="mb-4 text-center">Total Amount: {currencyFormat(valorTotal)}</p>
                         {isCompraFeita && (
                             <p className="mb-4 text-center text-green-500">Compra realizada com sucesso!</p>
                         )}
@@ -202,7 +203,7 @@ export default function Catalog() {
                                 onClick={() => handleAddToCart(item)}
                             >
                                 <h2 className="text-xl font-bold mb-2 line-clamp-2 break-words">{item.nome}</h2>
-                                <p className="text-lg text-gray-300">{`R$${item.preco.toFixed(2)}`}</p>
+                                <p className="text-lg text-gray-300">{currencyFormat(item.preco)}</p>
                                 <p className="text-sm text-gray-400">Disponivel: {item.estoque}</p>
                             </Button>
                         ))}
@@ -235,14 +236,14 @@ export default function Catalog() {
                                             <p className="font-semibold">{item.nome}</p>
                                             <p className="text-sm text-gray-400">x{item.quantity}</p>
                                         </div>
-                                        <span>{`R$${(item.preco * item.quantity).toFixed(2)}`}</span>
+                                        <span>{currencyFormat(item.preco * item.quantity)}</span>
                                     </li>
                                 ))}
                             </ul>
                             <div className="border-t-2 mt-4 pt-4">
                                 <p className="flex justify-between text-xl font-bold">
                                     <span>Total</span>
-                                    <span>{`R$${valorTotal.toFixed(2)}`}</span>
+                                    <span>{currencyFormat(valorTotal)}</span>
                                 </p>
                             </div>
                             <div className="px-10">

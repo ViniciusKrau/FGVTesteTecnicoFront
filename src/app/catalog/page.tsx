@@ -74,7 +74,6 @@ export default function Catalog() {
 
 
     const handleAddToCart = (product: Product) => {
-        setValorTotal(prevTotal => prevTotal + product.preco);
         setCart(prevCart => {
             const existingItem = prevCart.find(item => item.codProduto === product.codProduto);
             if (existingItem) {
@@ -87,7 +86,6 @@ export default function Catalog() {
                         : item
                 );
                 return cartItem;
-                
             }
             if (product.estoque > 0) {
                 return [...prevCart, { ...product, quantity: 1 }];
@@ -97,7 +95,6 @@ export default function Catalog() {
     };    
 
     const handleRemoveFromCart = (item: CartItem) => {
-        setValorTotal(prevTotal => prevTotal - (item?.preco || 0));
         setCart(prevCart => {
             const existingItem = prevCart.find(i => i.codProduto === item.codProduto);
             if (existingItem) {
@@ -118,10 +115,6 @@ export default function Catalog() {
         Cookies.set(nome, cart, { expires: 7 });
         setIsCompraFeita(true);
     }
-
-    // const handleUpdateValorTotal = (cart: CartItem[]) => {
-    //     setValorTotal(cart.reduce((sum, item) => sum + item.preco * item.quantity, 0));
-    // }
 
     const handleCompra = async () => {
         const produtosQuantidade: Api.ProdutosQuantidade[] = cart.map((cartItem) => ({

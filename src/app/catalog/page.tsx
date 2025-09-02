@@ -1,15 +1,15 @@
 "use client";
 
-import { apiFetch, Cliente, PagedResult, Product } from "@/api/ApiGet";
+import { apiFetch, apiPost } from "@/api/Api";
+import { Cliente, NewPedido, PagedResult, Product, ProdutosQuantidade } from "@/api/ApiInterface";
 import ButtonTailwind from "@/components/ButtonTailwind";
 import DefaultHeader from "@/components/header/DefaultHeader";
 import Modal from "@/components/Modal";
+import { currencyFormat } from "@/lib/currencyFormat";
 import { Button } from "@material-tailwind/react";
 import Cookies from "js-cookie";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import * as Api from "@/api/ApiGet";
-import { currencyFormat } from "@/lib/currencyFormat";
 
 interface CartItem extends Product {
     quantity: number;
@@ -27,7 +27,7 @@ export default function Catalog() {
     const [page, setPage] = useState(1);
     const [pageSize] = useState(16);
     const router = useRouter();
-    const [newPedido, setNewPedido] = useState<Api.NewPedido>({
+    const [newPedido, setNewPedido] = useState<NewPedido>({
         codCliente: 0,
         valorTotal: 0,
         produtosQuantidades: []
@@ -118,14 +118,14 @@ export default function Catalog() {
     }
 
     const handleCompra = async () => {
-        const produtosQuantidade: Api.ProdutosQuantidade[] = cart.map((cartItem) => ({
+        const produtosQuantidade: ProdutosQuantidade[] = cart.map((cartItem) => ({
             codProduto: cartItem.codProduto,
             quantidade: cartItem.quantity
         }));
 
         const clienteCod = Cookies.get("cliente") ? JSON.parse(Cookies.get("cliente")!).codCliente : 0;
 
-        const novoPedido: Api.NewPedido = {
+        const novoPedido: NewPedido = {
             codCliente: clienteCod,
             valorTotal: valorTotal,
             produtosQuantidades: produtosQuantidade
@@ -134,7 +134,7 @@ export default function Catalog() {
         console.log("New Pedido: ", novoPedido);
 
         try {
-            await Api.apiPost<Api.NewPedido>("/Pedido/create", novoPedido);
+            await apiPost<NewPedido>("/Pedido/create", novoPedido);
         } catch (error) {
             console.error("Erro ao criar pedido: ", error);
         }

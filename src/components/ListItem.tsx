@@ -1,6 +1,6 @@
 import React from "react";
-import { Pedido } from "@/api/ApiGet";
 import { currencyFormat } from "@/lib/currencyFormat";
+import { Pedido } from "@/api/ApiInterface";
 
 interface ListItemProps {
     items: Pedido[];
@@ -27,6 +27,17 @@ const ListItem: React.FC<ListItemProps> = ({
         "dataPedido",
         "valorTotal",
     ];
+
+    const handleCNPJMask = (value: string) => {
+        return value
+            .replace(/\D/g, "")
+            .replace(/^(\d{2})(\d)/, "$1.$2")
+            .replace(/^(\d{2})\.(\d{3})(\d)/, "$1.$2.$3")
+            .replace(/\.(\d{3})(\d)/, ".$1/$2")
+            .replace(/(\d{4})(\d)/, "$1-$2")
+            .replace(/(-\d{2})\d+?$/, "$1");
+    };
+
     return (
         <tbody>
             {items.map((item) => (
@@ -48,6 +59,8 @@ const ListItem: React.FC<ListItemProps> = ({
                                   })
                                 : key === "valorTotal" && !isNaN(Number(item[key]))
                                 ? currencyFormat(+item[key])
+                                : key === "cnpj"
+                                ? handleCNPJMask(item[key])
                                 : item[key]}
                         </td>
                     ))}

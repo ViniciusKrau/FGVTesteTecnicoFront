@@ -5,8 +5,9 @@ import ListHead from "@/components/ListHead";
 import ListItem from "@/components/ListItem";
 import Modal from "@/components/Modal";
 import { useRouter } from "next/navigation";
-import { useState, useEffect } from "react";
-import { apiFetch, Pedido, Cliente } from "@/api/ApiGet";
+import { useState, useEffect, useMemo } from "react";
+import { apiFetch} from "@/api/Api";
+import { Pedido, Cliente } from "@/api/ApiInterface";
 import Cookies from "js-cookie";
 import { currencyFormat } from "@/lib/currencyFormat";
 
@@ -20,6 +21,9 @@ export default function Home() {
     const [items, setItems] = useState<Pedido[]>([]);
     const [cnpj, setCnpj] = useState<string | null>(null);
     const [consultaError, setConsultaError] = useState<string | null>(null);
+    const [fromDate, setFromDate] = useState("");
+    const [toDate, setToDate] = useState("");
+    const [cnpjFilter, setCnpjFilter] = useState("");
 
     useEffect(() => {
         apiFetch<Pedido[]>("/Pedido/all")
@@ -39,8 +43,28 @@ export default function Home() {
         }
     }, [isNewPedidoModalOpen]);
 
+    
+    const unmaskCNPJ = (cnpj: string) => {
+        return cnpj.replace(/\D/g, "");
+    };
+
+    const filteredItems = useMemo(() => {
+        return items.filter((item) => {
+            const unmaskedCNPJ = unmaskCNPJ(cnpjFilter);
+            const itemDate = new Date(item.dataPedido);
+            const from = fromDate ? new Date(fromDate) : null;
+            const to = toDate ? new Date(toDate) : null;
+            const cnpjMatch = unmaskedCNPJ ? item.cnpj.toLowerCase().includes(unmaskedCNPJ.toLowerCase()) : true;
+
+            const dateMatch = (!from || itemDate >= from) && (!to || itemDate <= to);
+            return dateMatch && cnpjMatch;
+        });
+    }, [items, fromDate, toDate, cnpjFilter]);
+
+
     const handleSearchButton = () => {
-        apiFetch<Cliente>(`/Cliente/cnpj/${cnpjInput}`)
+
+        apiFetch<Cliente>(`/Cliente/cnpj/${unmaskCNPJ(cnpjInput)}`)
             .then((data) => {
                 if (data.cnpj === "") {
                     alert(
@@ -71,6 +95,16 @@ export default function Home() {
         router.push("/catalog");
     };
 
+    const handleCNPJMask = (value: string) => {
+        return value
+            .replace(/\D/g, "")
+            .replace(/^(\d{2})(\d)/, "$1.$2")
+            .replace(/^(\d{2})\.(\d{3})(\d)/, "$1.$2.$3")
+            .replace(/\.(\d{3})(\d)/, ".$1/$2")
+            .replace(/(\d{4})(\d)/, "$1-$2")
+            .replace(/(-\d{2})\d+?$/, "$1");
+    };
+
     return (
         <>
             {isNewPedidoModalOpen && (
@@ -88,7 +122,7 @@ export default function Home() {
                         type="text"
                         placeholder="cnpj"
                         className="input input-bordered w-full max-w-xs mb-3 bg-gray-300 text-black"
-                        value={cnpjInput}
+                        value={handleCNPJMask(cnpjInput)}
                         onChange={(e) => setCnpjInput(e.target.value)}
                     />
                     <div className="flex justify-center gap-10">
@@ -114,9 +148,52 @@ export default function Home() {
             <main className="mx-auto max-w-5xl p-8">
                 <h1 className="text-4xl font-semibold mb-4">Home</h1>
                 <div className="flex justify-between p-4">
-                    <p className="text-3xl text-gray-300 ml-4">Pedidos</p>
+                    <div>
+                        <p className="text-3xl text-gray-300">Pedidos</p>
+                        <div className="mt-4 space-y-2">
+                            <div>
+                                <label className="block text-sm font-medium text-gray-700">From Date</label>
+                                <input
+                                    type="date"
+                                    value={fromDate}
+                                    onChange={(e) => setFromDate(e.target.value)}
+                                    className="input input-bordered w-full max-w-xs bg-gray-100 text-black"
+                                />
+                            </div>
+                            <div>
+                                <label className="block text-sm font-medium text-gray-700">To Date</label>
+                                <input
+                                    type="date"
+                                    value={toDate}
+                                    onChange={(e) => setToDate(e.target.value)}
+                                    className="input input-bordered w-full max-w-xs bg-gray-100 text-black"
+                                />
+                            </div>
+                            <div>
+                                <label className="block text-sm font-medium text-gray-700">CNPJ</label>
+                                <input
+                                    type="text"
+                                    placeholder="Enter CNPJ"
+                                    value={handleCNPJMask(cnpjFilter)}
+                                    onChange={(e) => setCnpjFilter(e.target.value)}
+                                    className="input input-bordered w-full max-w-xs bg-gray-100 text-black"
+                                />
+                            </div>
+                            <ButtonTailwind
+                                className="btn btn-outline mt-2"
+                                onClick={() => {
+                                    setFromDate("");
+                                    setToDate("");
+                                    setCnpjFilter("");
+                                }}
+                            >
+                                Clear Filters
+                            </ButtonTailwind>
+                        </div>
+                    </div>
                     <ButtonTailwind
                         onClick={() => setIsNewPedidoModalOpen(true)}
+                        className="h-min self-end"
                     >
                         Novo Pedido
                     </ButtonTailwind>
@@ -134,7 +211,7 @@ export default function Home() {
                         rowClassName="bg-gray-800"
                     />
                     <ListItem
-                        items={items}
+                        items={filteredItems}
                         onSelect={(item) => {
                             setSelectedItem(item);
                             setIsListModalOpen(true);
@@ -151,7 +228,7 @@ export default function Home() {
                         {selectedItem.codPedido}
                     </h2>
                     <p>
-                        <strong>CNPJ:</strong> {selectedItem.cnpj}
+                        <strong>CNPJ:</strong> {handleCNPJMask(selectedItem.cnpj)}
                     </p>
                     <p>
                         <strong>Nome:</strong> {selectedItem.nome}

@@ -187,7 +187,7 @@ export default function Home() {
                                     setCnpjFilter("");
                                 }}
                             >
-                                Clear Filters
+                                Limpar Filtros
                             </ButtonTailwind>
                         </div>
                     </div>

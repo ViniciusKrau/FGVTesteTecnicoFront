@@ -138,6 +138,7 @@ export default function Catalog() {
         } catch (error) {
             console.error("Erro ao criar pedido: ", error);
         }
+        router.push("/");
     }
 
     const handleCheckout = () => {
@@ -186,7 +187,7 @@ export default function Catalog() {
                                 handleCompra();
                                 handleCookies("cart", JSON.stringify(cart));
                             }}>
-                                Confirm
+                                Confirmar
                             </ButtonTailwind>
                         </div>
                     </div>
@@ -223,9 +224,9 @@ export default function Catalog() {
                         </ButtonTailwind>
                     </div>
                 )}
-                    <h2 className="text-3xl font-semibold mb-4 border-b-2 pb-2">Cart</h2>
+                    <h2 className="text-3xl font-semibold mb-4 border-b-2 pb-2">Carrinho</h2>
                     {cart.length === 0 && (
-                        <p className="text-gray-400">Your cart is empty.</p>
+                        <p className="text-gray-400">Seu carrinho está vazio.</p>
                     )}
                         <>
                             <ul className="max-h-96 overflow-y-auto">
@@ -251,17 +252,17 @@ export default function Catalog() {
                                     Checkout
                                 </Button>
                                 <Button className="w-full mt-4 bg-red-700" onClick={() => {setCart([]); Cookies.remove("cart");}}>
-                                    Clear Cart
+                                    Limpar Carrinho
                                 </Button>
                             </div>
                         </>
                     <div className="flex justify-center mt-4 gap-4">
                         <ButtonTailwind onClick={() => setPage(page => Math.max(page - 1, 1))}>
-                            Previous
+                            Voltar
                         </ButtonTailwind>
-                        <span>Page {page}</span>
+                        <span>Página {page}</span>
                         <ButtonTailwind onClick={() => setPage(page => page + 1)} hidden={page === totalPages}>
-                            Next
+                            Avançar
                         </ButtonTailwind>
                     </div>  
                 </div>

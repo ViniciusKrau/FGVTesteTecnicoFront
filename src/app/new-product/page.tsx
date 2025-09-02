@@ -14,20 +14,16 @@ export default function NewProductPage() {
 
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
-        try {
-            const formData = new FormData(event.currentTarget);
-            const newProduct: NewProduct = {
-                nome: formData.get("name") as string,
-                preco: parseFloat(formData.get("price") as string),
-                estoque: parseInt(formData.get("stock") as string, 10),
-            };
-            await apiPost("/Produto/create", newProduct);
-            setMessage("Product created successfully!");
-            setMessageType("success");
-        } catch (error) {
-            setMessage("Failed to create product.");
-            setMessageType("error");
-        }
+        const formData = new FormData(event.currentTarget);
+        const newProduct: NewProduct = {
+            nome: formData.get("name") as string,
+            preco: parseFloat(formData.get("price") as string),
+            estoque: parseInt(formData.get("stock") as string, 10),
+        };
+        console.log(newProduct);
+        await apiPost("/Produto/create", newProduct);
+        setMessage("Product created successfully!");
+        setMessageType("success");
     };
 
     return (

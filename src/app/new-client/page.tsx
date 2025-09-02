@@ -46,6 +46,12 @@ export default function NewClient() {
 
                     <FormInput label="Email" id="email" type="email" required />
 
+                    {message && (
+                        <div className={`m-4 px-4 text-white ${messageType === "success" ? "bg-green-500" : "bg-red-500"} rounded`}>
+                            {message}
+                        </div>
+                    )}
+
                     <div>
                         <ButtonTailwind
                             type="submit"

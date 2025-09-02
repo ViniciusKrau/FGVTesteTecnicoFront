@@ -7,11 +7,13 @@ type ButtonProps = {
   children?: React.ReactNode;
   className?: string;
   onClick?: () => void;
+  disabled?: boolean;
+  hidden?: boolean; 
   type?: "button" | "submit" | "reset" | undefined;
 };
 
 
-export default function ButtonTailwind({ children, className = '', onClick, type = "button" }: ButtonProps) {
+export default function ButtonTailwind({ children, className = '', onClick, type = "button", disabled, hidden }: ButtonProps) {
 
   return (
     <Button
@@ -19,11 +21,12 @@ export default function ButtonTailwind({ children, className = '', onClick, type
         `rounded-full border
         text-sm sm:text-base py-2 px-4
         hover:cursor-pointer
+        ${hidden ? 'invisible' : ''}
         ${className || ''}`
       }
       onClick={onClick}
       type={type}
-
+      disabled={disabled}
     >
       {children}
     </Button>

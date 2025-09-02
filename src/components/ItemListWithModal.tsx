@@ -1,18 +1,18 @@
 // ...existing code...
 import React, { useState } from 'react';
 import ListHead from '@/components/ListHead';
-import ListItem, { ListRecord } from '@/components/ListItem';
+import ListItem, { Pedido } from '@/components/ListItem';
 
 export type ItemListWithModalProps = {
-    items: ListRecord[];
+    items: Pedido[];
     columns?: (string | { key?: string; label: React.ReactNode })[];
 };
 
 export default function ItemListWithModal({ items, columns }: ItemListWithModalProps) {
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const [selectedItem, setSelectedItem] = useState<ListRecord | null>(null);
+    const [selectedItem, setSelectedItem] = useState<Pedido | null>(null);
 
-    const openModal = (item: ListRecord) => {
+    const openModal = (item: Pedido) => {
         setSelectedItem(item);
         setIsModalOpen(true);
     };

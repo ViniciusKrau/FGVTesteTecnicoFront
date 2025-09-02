@@ -5,7 +5,6 @@ export const defaultHeaderButtons: HeaderButtonItem[] = [
     { label: 'Home', to: '/' },
     { label: 'Cadastrar Produto', to: '/new-product' },
     { label: 'Cadastrar Cliente', to: '/new-client' },
-    { label: 'Carrinho', to: '/cart' },
 ];
 
 export type DefaultHeaderProps = {
@@ -24,8 +23,6 @@ export default function DefaultHeader({
         ...(buttons ?? []),
         ...(extraButtons ?? [])
     ];
-
-    console.log('DefaultHeader finalButtons:', finalButtons);
 
     return (
         <Header

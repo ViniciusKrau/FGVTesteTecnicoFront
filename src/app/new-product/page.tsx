@@ -1,21 +1,34 @@
+"use client";
+
 import DefaultHeader from '@/components/header/DefaultHeader';
 import ButtonTailwind from '@/components/ButtonTailwind';
 import FormInput from '@/components/FormInput';
-
+import * as Api from '@/api/ApiGet';
 
 export default function NewProduct() {
+
+    const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+        event.preventDefault();
+        const formData = new FormData(event.currentTarget);
+        const newProduct: Api.NewProduct = {
+            nome: formData.get("name") as string,
+            preco: parseFloat(formData.get("price") as string),
+            estoque: parseInt(formData.get("stock") as string, 10),
+        };
+        await Api.apiPost("/Produto/create", newProduct);
+    };
 
     return (
         <>
             <DefaultHeader/>
             <main className="mx-auto max-w-5xl p-8">
                 <h1 className="text-3xl font-semibold mb-4">New Product</h1>
-                <form className="space-y-6">
+                <form className="space-y-6" onSubmit={handleSubmit}>
                     <FormInput label="Name" id="name" type="text" required />
 
-                    <FormInput label="Preço" id="price" type="number" required={true} />
+                    <FormInput label="Preço" id="price" type="number" step="0.01" min="0" max={99999999.99} required />
 
-                    <FormInput label="Estoque" id="stock" type="number" required={true} />
+                    <FormInput label="Estoque" id="stock" type="number" required />
 
                     <div>
                         <ButtonTailwind
